@@ -16,7 +16,7 @@ window.addEventListener("load", function() {
                     if (json[j].hoursInSpace === numHours[i]) {
                         astronautCount++;
                         let activeTrue = '';
-                        if (json[j].active === true) {
+                        if (json[j].active) {
                             activeTrue = 'style="color:green"';
                         }
                         div.innerHTML += `
