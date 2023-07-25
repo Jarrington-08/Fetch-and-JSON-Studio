@@ -3,39 +3,29 @@ window.addEventListener("load", function() {
     fetchPromise.then( function(response) {
         const jsonPromise = response.json();
         jsonPromise.then( function(json) {
-            let numHours = [];
+            let sortedJson = json.sort((a, b) => b.hoursInSpace - a.hoursInSpace );
             let astronautCount = 0;
-            for (let i = 0; i < json.length; i++) {
-                numHours.push(json[i].hoursInSpace);
-            }
-            numHours = numHours.sort(function(a,b){return b-a});
-            console.log(numHours);
             const div = document.getElementById("container");
-            for (let i = 0; i < numHours.length; i++) {
-                for (let j = 0; j < json.length; j++) {
-                    if (json[j].hoursInSpace === numHours[i]) {
-                        astronautCount++;
-                        let activeTrue = '';
-                        if (json[j].active) {
-                            activeTrue = 'style="color:green"';
-                        }
-                        div.innerHTML += `
-                        <div class="astronaut">
-                            <div class="bio">
-                                <h3>${json[j].firstName} ${json[j].lastName}</h3>
-                                <ul>
-                                    <li>Hours in space: ${json[j].hoursInSpace}</li>
-                                    <li ${activeTrue}>Active: ${json[j].active}</li>
-                                    <li>Skills: ${json[j].skills.join(', ')}</li>
-                                </ul>
-                            </div>
-                            <img class="avatar" src="${json[j].picture}">
-                        </div>`;
+                for (let j = 0; j < sortedJson.length; j++) {
+                    astronautCount++;
+                    let activeTrue = '';
+                    if (sortedJson[j].active) {
+                        activeTrue = 'style="color:green"';
                     }
-                
+                    div.innerHTML += `
+                    <div class="astronaut">
+                        <div class="bio">
+                            <h3>${sortedJson[j].firstName} ${sortedJson[j].lastName}</h3>
+                            <ul>
+                                <li>Hours in space: ${sortedJson[j].hoursInSpace}</li>
+                                <li ${activeTrue}>Active: ${sortedJson[j].active}</li>
+                                <li>Skills: ${sortedJson[j].skills.join(', ')}</li>
+                            </ul>
+                        </div>
+                        <img class="avatar" src="${sortedJson[j].picture}">
+                    </div>`;
                 }
-            } 
-            document.getElementById("count").innerHTML = `Total Number of Astronauts: ${astronautCount}`;
-        });
+            });
+        }); 
+        document.getElementById("count").innerHTML = `Total Number of Astronauts: ${astronautCount}`;
     });
-})
